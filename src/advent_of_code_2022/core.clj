@@ -25,8 +25,7 @@
                 str/split-lines
                 (partition-by #(= "" %))
                 (filter #(not= '("") %))
-                (map sum-it)
-                )
+                (map sum-it))
         question1 (apply max input)
         question2 (->> input
              sort
@@ -34,7 +33,5 @@
              (partition 3)
              first
              (apply +)
-             )
-
-        ]
-    [question1 question2] ))
+             )]
+    [question1 question2]))
