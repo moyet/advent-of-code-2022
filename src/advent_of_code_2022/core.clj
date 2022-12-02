@@ -2,11 +2,6 @@
   (:require [clojure.string :as str])
   )
 
-(defn foo
-  "I don't do a whole lot."
-  [x]
-  (println x "Hello, World!"))
-
 (defn sum-it
   [x]
   (->>
@@ -44,28 +39,20 @@
         score (case me
                 "X" 1
                 "Y" 2
-                "Z" 3)
-        ]
+                "Z" 3)]
     (if
       (or
         (and (= opponent "A") (= me "X"))
         (and (= opponent "B") (= me "Y"))
-        (and (= opponent "C") (= me "Z"))
-        )
+        (and (= opponent "C") (= me "Z")))
       (+ score 3)
       (if
         (or
           (and (= opponent "A") (= me "Y"))
           (and (= opponent "B") (= me "Z"))
-          (and (= opponent "C") (= me "X"))
-          )
+          (and (= opponent "C") (= me "X")))
         (+ score 6)
-        score
-        )
-      )
-    )
-  )
-
+        score))))
 
 
 (defn calculate-score-2
