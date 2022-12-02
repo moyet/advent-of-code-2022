@@ -28,13 +28,12 @@
                 (map sum-it))
         question1 (apply max input)
         question2 (->> input
-                       sort
-                       reverse
-                       (partition 3)
-                       first
+                       (sort-by -)
+                       (take 3)
                        (apply +)
                        )]
     [question1 question2]))
+
 
 (defn- calculate-score
   [s]
@@ -74,9 +73,6 @@
   (let [rpc {:rock     1
              :paper    2
              :scissors 3}
-        abc {"A" :rock
-             "B" :paper
-             "C" :scissors}
         xyz {"X" 0
              "Y" 3
              "Z" 6}
@@ -118,5 +114,4 @@
                     (map calculate-score-2)
                     (apply +))]
 
-    [question1 question2]
-    ))
+    [question1 question2]))
