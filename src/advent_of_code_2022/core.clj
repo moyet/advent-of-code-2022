@@ -1,5 +1,6 @@
 (ns advent-of-code-2022.core
-  (:require [clojure.string :as str])
+  (:require [clojure.string :as str]
+            [clojure.set :as set])
   )
 
 (defn sum-it
@@ -31,11 +32,9 @@
 
 
 (defn- calculate-score
-  [s]
+  [line]
   (let [
-        dubbel (str/split s #" ")
-        opponent (first dubbel)
-        me (last dubbel)
+        [opponent me] (str/split line #" ")
         score (case me
                 "X" 1
                 "Y" 2
@@ -63,9 +62,7 @@
         xyz {"X" 0
              "Y" 3
              "Z" 6}
-        dubbel (str/split s #" ")
-        opponent (first dubbel)
-        me (last dubbel)
+        [opponent me] (str/split s #" ")
 
         score (xyz me)
 
@@ -99,6 +96,48 @@
                     slurp
                     str/split-lines
                     (map calculate-score-2)
-                    (apply +))]
+                    (reduce +))]
 
     [question1 question2]))
+
+(defn char-range [start end]
+  (map char (range (int start) (inc (int end)))))
+
+
+(defn- split-in-half
+  [sack]
+  (let [halfed (/ (count sack) 2)
+        [comp-1 comp-2] (split-at halfed sack)
+        ]
+    (set/intersection (set comp-1) (set comp-2))
+    )
+  )
+
+(defn- get-intersection
+  [[fst sec third]]
+    (set/intersection (set fst) (set sec) (set third)))
+
+(defn day3
+  [file-name]
+  (let [
+        day3-scores (zipmap
+                      (concat (char-range \a \z) (char-range \A \Z))
+                      (range 1 53))
+        question1 (->>
+                    file-name
+                    slurp
+                    (str/split-lines)
+                    (map split-in-half)
+                    (map #(get-in day3-scores %))
+                    (reduce +))
+        question2 (->>
+                    file-name
+                    slurp
+                    (str/split-lines)
+                    (partition 3)
+                    (map get-intersection)
+                    (map #(get-in day3-scores %))
+                    (reduce +))]
+    [question1 question2]
+    )
+  )
