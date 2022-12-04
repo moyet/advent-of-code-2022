@@ -103,41 +103,100 @@
 (defn char-range [start end]
   (map char (range (int start) (inc (int end)))))
 
-
 (defn- split-in-half
   [sack]
   (let [halfed (/ (count sack) 2)
-        [comp-1 comp-2] (split-at halfed sack)
-        ]
-    (set/intersection (set comp-1) (set comp-2))
-    )
-  )
+        [comp-1 comp-2] (split-at halfed sack)]
+    (set/intersection (set comp-1) (set comp-2))))
 
 (defn- get-intersection
   [[fst sec third]]
-    (set/intersection (set fst) (set sec) (set third)))
+  (set/intersection (set fst) (set sec) (set third)))
 
 (defn day3
   [file-name]
-  (let [
-        day3-scores (zipmap
+  (let [day3-scores (zipmap
                       (concat (char-range \a \z) (char-range \A \Z))
                       (range 1 53))
         question1 (->>
                     file-name
                     slurp
-                    (str/split-lines)
+                    str/split-lines
                     (map split-in-half)
                     (map #(get-in day3-scores %))
                     (reduce +))
         question2 (->>
                     file-name
                     slurp
-                    (str/split-lines)
+                    str/split-lines
                     (partition 3)
                     (map get-intersection)
                     (map #(get-in day3-scores %))
                     (reduce +))]
-    [question1 question2]
-    )
-  )
+    [question1 question2]))
+
+
+(defn day4
+  [file-name]
+  (let [
+        find-subsets (fn [ranges]
+                       (let [range-1 (range (-> ranges
+                                                first
+                                                Integer/parseInt)
+                                            (->> ranges
+                                                 second
+                                                 Integer/parseInt
+                                                 inc))
+                             range-2 (range (->
+                                              ranges
+                                              (nth 2)
+                                              Integer/parseInt)
+                                            (-> ranges
+                                                last
+                                                Integer/parseInt
+                                                inc))
+
+                             set-1 (set range-1)
+                             set-2 (set range-2)]
+
+                         (or (set/subset? set-1 set-2)
+                             (set/subset? set-2 set-1)
+                             )))
+
+        find-overlaps (fn [ranges]
+                        (let [range-1 (range (-> ranges
+                                                 first
+                                                 Integer/parseInt)
+                                             (->> ranges
+                                                  second
+                                                  Integer/parseInt
+                                                  inc))
+                              range-2 (range (->
+                                               ranges
+                                               (nth 2)
+                                               Integer/parseInt)
+                                             (-> ranges
+                                                 last
+                                                 Integer/parseInt
+                                                 inc))
+
+                              set-1 (set range-1)
+                              set-2 (set range-2)]
+                          (set/intersection set-1 set-2)))
+        question1 (->>
+                    file-name
+                    slurp
+                    str/split-lines
+                    (map #(str/split % #"[-,]"))
+                    (filter find-subsets)
+                    count)
+
+        question2 (->>
+                    file-name
+                    slurp
+                    str/split-lines
+                    (map #(str/split % #"[-,]"))
+                    (map find-overlaps)
+                    (filter #(not= 0 (count %)))
+                    count)]
+    [question1 question2]))
