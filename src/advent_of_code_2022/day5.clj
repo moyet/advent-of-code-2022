@@ -1,4 +1,8 @@
-(ns advent-of-code-2022.day5)
+(ns advent-of-code-2022.day5
+  (:require [clojure.string :as str]
+            [clojure.set :as set]
+            )
+  )
 
 (defn transpose [m]
   (apply mapv vector m))
