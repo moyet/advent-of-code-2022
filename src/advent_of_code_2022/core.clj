@@ -1,7 +1,7 @@
 (ns advent-of-code-2022.core
   (:require [clojure.string :as str]
             [clojure.set :as set]
-            [advent-of-code-2022.day5 :as day5]
+            [advent-of-code-2022.day7 :as day7]
             )
   )
 
@@ -207,19 +207,18 @@
   (let [
         lenght-of-block 14
         parts (partition lenght-of-block 1 test-string)
-        lenghts     (map (fn [block]
-                           (-> block
-                               set
-                               count
-                               )
+        lenghts (map (fn [block]
+                       (-> block
+                           set
+                           count
                            )
-                         parts)
+                       )
+                     parts)
 
         index (.indexOf lenghts lenght-of-block)
         question1 (+ lenght-of-block index)
         ]
-  question1))
-
+    question1))
 
 (defn main
   []
