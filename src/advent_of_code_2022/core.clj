@@ -2,6 +2,7 @@
   (:require [clojure.string :as str]
             [clojure.set :as set]
             [advent-of-code-2022.day7 :as day7]
+            [advent-of-code-2022.day8 :as day8]
             )
   )
 
