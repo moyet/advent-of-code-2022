@@ -6,48 +6,35 @@
 (def tail-positions (atom []))
 (def head-position (atom {:x 0 :y 0}))
 (def tail-position (atom {:x 0 :y 0}))
-(def positions (atom []))
+(def positions (atom  [{:x 0 :y 0}
+                       {:x 0 :y 0}
+                       {:x 0 :y 0}
+                       {:x 0 :y 0}
+                       {:x 0 :y 0}
+                       {:x 0 :y 0}
+                       {:x 0 :y 0}
+                       {:x 0 :y 0}
+                       {:x 0 :y 0}]))
 
 
-(defn tail-follow []
-  (let [x-diff (- (@head-position :x) (@tail-position :x))
-        y-diff (- (@head-position :y) (@tail-position :y))]
+(defn tail-follow [x-diff y-diff]
+  (let [x-diffs (- (@head-position :x) (@tail-position :x))
+        y-diffs (- (@head-position :y) (@tail-position :y))]
 
     (case [x-diff y-diff]
-      [0 2] (swap! tail-position update-in [:y] inc)
-      [2 0] (swap! tail-position update-in [:x] inc)
-      [0 -2] (swap! tail-position update-in [:y] dec)
-      [-2 0] (swap! tail-position update-in [:x] dec)
-
-      ([1 2] [2 1]) (do
-                      (swap! tail-position update-in [:x] inc)
-                      (swap! tail-position update-in [:y] inc)
-                      )
-
-      ([1 -2] [2 -1]) (do
-                        (swap! tail-position update-in [:y] dec)
-                        (swap! tail-position update-in [:x] inc)
-                        )
-
-      ([-2 1] [-1 2]) (do
-                         (swap! tail-position update-in [:y] inc)
-                         (swap! tail-position update-in [:x] dec))
-      ([-2 -1] [-1 -2]) (do
-                          (swap! tail-position update-in [:y] dec)
-                          (swap! tail-position update-in [:x] dec)
-                          )
-
-      ([0 0] [1 0] [-1 0] [0 1] [0 -1] [1 1] [-1 -1] [1 -1] [-1 1]) (println "Nothing will happen 0 0 ")
+      [0 2] [0 1]
+      [2 0] [1 0]
+      [0 -2] [0 -1]
+      [-2 0] [-1 0]
+      ([1 2] [2 1] [2 2]) [1 1]
+      ([1 -2] [2 -1] [2 -2]) [1 -1]
+      ([-2 1] [-1 2] [-2 2] ) [-1 1]
+      ([-2 -1] [-1 -2] [-2 -2]) [-1 -1]
+      ([0 0] [1 0] [-1 0] [0 1] [0 -1] [1 1] [-1 -1] [1 -1] [-1 1]) [0 0]
+      (println "Error " x-diff y-diff)
       )
-
-    ;; lets update tail-posistion
-    (swap! tail-positions conj @tail-position)
-    (swap! positions conj @head-position)
-
     )
   )
-
-
 
 (defn day9-question1
   []
@@ -66,11 +53,62 @@
             "U" (swap! head-position update-in [:y] inc)
             "D" (swap! head-position update-in [:y] dec)
             )
-          (tail-follow)
+          (let [[x y] (tail-follow (- (@head-position :x) (@tail-position :x))
+                                   (- (@head-position :y) (@tail-position :y)))
+                ]
+            (swap! tail-position update-in [:x] #(+ % x))
+            (swap! tail-position update-in [:y] #(+ % y))
 
+            (swap! tail-positions conj @tail-position)
+            )
           )
         )
+      )
+    (-> @tail-positions
+        set
+        count)
+    )
+  )
 
+(defn day9-question2
+  []
+  (let [input (->>
+                "resources/day9.data"
+                slurp
+                str/split-lines
+                (map #(str/split % #" "))
+                )]
+
+    (doseq [[direction length] input]
+      (let [length (Integer/parseInt length)]
+        (dotimes [_ length]
+          (case direction
+            "R" (swap! head-position update-in [:x] inc)
+            "L" (swap! head-position update-in [:x] dec)
+            "U" (swap! head-position update-in [:y] inc)
+            "D" (swap! head-position update-in [:y] dec))
+
+          (dotimes [pos 9]
+            (try (let [body-pos (nth @positions pos)
+              previous-pos (if (= pos 0)
+                             @head-position
+                             (nth @positions (dec pos))
+                             )
+
+              [x y] (tail-follow (- (previous-pos :x) (body-pos :x))
+                                 (- (previous-pos :y) (body-pos :y)))
+              ]
+
+              (swap! positions update-in [pos :x] #(+ % x))
+              (swap! positions update-in [pos :y] #(+ % y))
+              )
+               (catch Exception e
+                 (println e)
+                 )  ))
+
+          (swap! tail-positions conj (nth @positions 8))
+          )
+        )
       )
     (-> @tail-positions
         set
