@@ -3,6 +3,7 @@
             [clojure.set :as set]
             [advent-of-code-2022.day7 :as day7]
             [advent-of-code-2022.day8 :as day8]
+            [advent-of-code-2022.day11 :as day11]
             )
   )
 
