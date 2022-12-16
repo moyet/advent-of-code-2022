@@ -5,7 +5,7 @@
 (def monkees (atom []))
 
 
-(defn monkee-throws
+(defn monkee-throws-part1
   [monkee]
   (let [operations {"*" *
                     "+" +}
@@ -19,16 +19,14 @@
         item (:value mapped-item)
 
          operation (operations (monkee :operation))
-         _ (println "Monkey " id " takes an item " item " and looks at it")
          value (if (= "old" value)
                  item
                  (Integer/parseInt value)
                  )
 
          new-value (operation item value)
-         _ (println "Worry level is " (monkee :operation) " by " value " to " new-value " .")
+
          new-value (long (/ new-value 3))
-         _ (println "Monkey gets bored with item. Worry level is divided by 3 to " new-value)
 
          test-result (= 0 (mod new-value (:test monkee)))
 
@@ -44,12 +42,9 @@
                   :next-monkee recieving-monkee
                   }
          mapped-item (assoc mapped-item :value new-value)
-         mapped-item (update mapped-item :history concat [history])
+         ;;mapped-item (update mapped-item :history concat [history])
 
          ]
-
-        (println "Monkee tests the item it's " test-result)
-        (println "Monkee throws the item to " recieving-monkee)
 
         (swap! monkees update-in [recieving-monkee :items] concat [mapped-item])
         (swap! monkees update-in [id :inspected] inc)
@@ -59,10 +54,61 @@
     )
   )
 
+(defn monkee-throws-part2
+  [monkee]
+  (let [operations {"*" *
+                    "+" +}
+        value (:value monkee)
+        id (:id monkee)
+        items (:items monkee)
+        ]
+    (doseq [mapped-item items]
+      (let
+        [
+         item (:value mapped-item)
+
+         operation (operations (monkee :operation))
+         value (if (= "old" value)
+                 item
+                 (Integer/parseInt value)
+                 )
+
+         new-value (operation item value)
+
+
+         new-value (long (mod new-value 9699690))
+
+         test-result (= 0 (mod new-value (:test monkee)))
+
+         recieving-monkee (->
+                            test-result
+                            str
+                            keyword
+                            monkee
+                            )
+         history {:monkee      id
+                  :operation   operation
+                  :start-value item
+                  :next-monkee recieving-monkee
+                  }
+         mapped-item (assoc mapped-item :value new-value)
+         ;;mapped-item (update mapped-item :history concat [history])
+
+         ]
+
+        (swap! monkees update-in [recieving-monkee :items] concat [mapped-item])
+        (swap! monkees update-in [id :inspected] inc)
+        (swap! monkees update-in [id :items] rest)
+        )
+      )
+    )
+  )
+
+
 (defn do-a-round
   []
   (dotimes [monkee (count @monkees)]
-    (monkee-throws (nth @monkees monkee))
+    (monkee-throws-part1 (nth @monkees monkee))
     )
   )
 
@@ -119,8 +165,6 @@
             mapped-items (map create-item items)
             ]
 
-
-
         (swap! monkees conj {:items     mapped-items
                              :operation operation
                              :value     value
@@ -131,15 +175,12 @@
                              :id        monkee-number
                              }
                )))
-    (do-a-lot-of-rounds 20)
+    (do-a-lot-of-rounds 10000)
     (let [
           inspected (sort > (map :inspected @monkees))
           first-number (first inspected)
-          second-number (second inspected)
-          ]
+          second-number (second inspected)]
       (* first-number second-number)
       )
-
-
     )
   )
