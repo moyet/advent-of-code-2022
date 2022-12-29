@@ -7,12 +7,10 @@
 (def a-graph (atom {}))
 (def visited (atom {}))
 
-
 (def start (atom []))
 (def end (atom []))
 (def size (atom []))
 (def list-of-as (atom []))
-
 
 (defn get-height [node]
   (let [height (->
@@ -29,10 +27,6 @@
       )
     )
   )
-
-
-(defn lazy-contains? [col key]
-  (some #{key} col))
 
 
 (defn add-nodes [n1 n2]

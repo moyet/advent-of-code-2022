@@ -16,7 +16,6 @@
         right-int? (int? right)
         case-point [left-int? right-int?]
         ]
-    (println left right)
     (if (= left right)
       true
       (if (nil? left)
