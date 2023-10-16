@@ -1,8 +1,7 @@
 (ns advent-of-code-2022.day15
   (:require [clojure.string :as str]
             [clojure.set :as set]
-            )
-  )
+            ))
 
 (def cave (atom {}))
 (def min-x (atom 0))
@@ -53,13 +52,7 @@
       (doseq [y ys]
         (if (<= (manhattan-distance point [x y]) distance)
           (if (= \. (get @cave [x y]))
-            (swap! cave assoc [x y] \#)
-            )
-          )
-        )
-      )
-    )
-  )
+            (swap! cave assoc [x y] \#)))))))
 
 
 
