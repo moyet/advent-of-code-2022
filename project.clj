@@ -6,6 +6,7 @@
   :dependencies [[org.clojure/clojure "1.10.0"]
                  [hato "0.9.0"]
                  [clj-http "3.12.3"]
+                 [pandect "1.0.2"]
                  ]
   :main ^:skip-aot advent-of-code-2022.core/main
   :repl-options {:init-ns advent-of-code-2022.core})

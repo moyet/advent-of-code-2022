@@ -1,6 +1,8 @@
 (ns advent-of-code-2022.advent-of-code-2015
   (:require [clojure.string :as str]
             [clojure.set :as set]
+            [pandect.algo.md5 :as m]
+
             )
   )
 
@@ -100,31 +102,91 @@
     )
   )
 
+(def start {:pos [0 0]
+            :visited #{}
+            :vektor (vec input-day-3)
+            })
 
-(def pos (atom [0 0]))
-(def visited (atom (set [])))
-(defn moving [char]
-  (cond
-    (= char \v)  (do
-                   (swap! pos update 0 dec)
-                   (swap! visited concat [@pos])
-                   )
-    (= char \>)  (do
-                   (swap! pos update 1 inc)
-                   (swap! visited concat [@pos])
-                   )
-    (= char \<)  (do
-                   (swap! pos update 1 dec)
-                   (swap! visited concat [@pos])
-                   )
-    (= char \^)  (do
-                   (swap! pos update 0 inc)
-                   (swap! visited concat [@pos])
-                   )
-    :else (println "Else"))
-  )
+(defn moving [{:keys [pos visited vektor]}]
+  (let [karakter (first vektor)
+        [x y] pos
+        new-pos (cond
+                  (= karakter \v) [x (dec y)]
+                  (= karakter \^) [x (inc y)]
+                  (= karakter \<) [(dec x) y]
+                  (= karakter \>) [(inc x) y]
+                  :else [x y])
+        new-visited (conj visited new-pos)]
+
+    {:pos new-pos
+     :vektor (rest vektor)
+     :visited new-visited}))
+
+(defn moving-again [{:keys [pos-santa pos-rob visited vektor]}]
+  (let [[ks kr] (first vektor)
+        [x y] pos-santa
+        [z w] pos-rob
+        new-pos-santa (cond
+                  (= ks \v) [x (dec y)]
+                  (= ks \^) [x (inc y)]
+                  (= ks \<) [(dec x) y]
+                  (= ks \>) [(inc x) y]
+                  :else [x y])
+        new-pos-rob (cond
+                  (= kr \v) [z (dec w)]
+                  (= kr \^) [z (inc w)]
+                  (= kr \<) [(dec z) w]
+                  (= kr \>) [(inc z) w]
+                  :else [z w])
+
+        new-visited (conj visited new-pos-santa new-pos-rob)]
+
+    {:pos-santa new-pos-santa
+     :pos-rob new-pos-rob
+     :vektor (rest vektor)
+     :visited new-visited}))
+
+
 (defn day3-1
   []
-  (let []
-    (vec input-day-3)
-    ))
+  (loop [res start ]
+    (if (= 0 (count (:vektor res)))
+      res
+      (recur (moving res))
+      )
+    )
+  )
+
+(defn day3-2
+  []
+  (let [partitioned (partition 2 input-day-3)]
+    (loop
+      [res {:vektor (partition 2 input-day-3)
+            :pos-santa [0 0]
+            :pos-rob [0 0]
+            :visited #{}
+            }]
+      (if (= 0 (count (:vektor res)))
+        res
+        (recur (moving-again res))
+        )
+      )
+
+    )
+  )
+
+(defn day4-1
+  []
+  (let [input "bgvyzdsv"]
+    (loop
+      [counter 0]
+      (let [
+            result (->> counter
+                        (str input)
+                        m/md5
+                        (take 6)
+                    )]
+        (if (= result '(\0 \0 \0 \0 \0 \0))
+          counter
+          (recur (inc counter))
+          )))))
