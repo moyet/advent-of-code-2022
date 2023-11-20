@@ -54,18 +54,20 @@
 
 (defn day3-1
   []
-  (loop [res start ]
+  (let [result (loop [res start ]
     (if (= 0 (count (:vektor res)))
       res
       (recur (moving res))
       )
-    )
-  )
+    )]
+    (-> result
+        :visited
+        count)))
 
 (defn day3-2
   []
   (let [partitioned (partition 2 input)]
-    (loop
+    (let [result (loop
       [res {:vektor partitioned
             :pos-santa [0 0]
             :pos-rob [0 0]
@@ -73,4 +75,7 @@
             }]
       (if (= 0 (count (:vektor res)))
         res
-        (recur (moving-again res))))))
+        (recur (moving-again res))))]
+      (-> result
+          :visited
+          count))))
