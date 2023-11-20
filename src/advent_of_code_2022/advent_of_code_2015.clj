@@ -168,12 +168,7 @@
             }]
       (if (= 0 (count (:vektor res)))
         res
-        (recur (moving-again res))
-        )
-      )
-
-    )
-  )
+        (recur (moving-again res))))))
 
 (defn day4-1
   []
@@ -188,5 +183,50 @@
                     )]
         (if (= result '(\0 \0 \0 \0 \0 \0))
           counter
-          (recur (inc counter))
-          )))))
+          (recur (inc counter)))))))
+
+
+(defn day5-1
+  []
+  (let [vokaler #"[aeiou]"
+        disallowed #"(ab)|(cd)|(pq)|(xy)"
+        input (->> "resources/2015-day5.data"
+                   slurp
+                   str/split-lines
+                   (filter (fn [streng]
+                             (->>
+                               streng
+                               (re-seq vokaler)
+                               count
+                               (<= 3)
+                               )))
+                   (filter (fn [streng]
+                             (->> streng
+                                   (re-find #"(.)\1")
+                                  )))
+                   (filter (fn [streng]
+                             (->> streng
+                                  (re-find disallowed)
+                                  count
+                                  (= 0))))
+                   count
+                   )]
+    input))
+
+(defn day5-2
+  []
+  (let [input
+        (->> "resources/2015-day5.data"
+             slurp
+             str/split-lines
+             (filter (fn [strengt]
+                       (->> strengt
+                            (re-find #"(..).*\1")
+                            )))
+             (filter (fn [strengt]
+                       (->> strengt
+                            (re-find #"(.).\1")
+                            )))
+             count)]
+    input))
+
