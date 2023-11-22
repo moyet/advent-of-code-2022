@@ -1,7 +1,6 @@
 (ns year2015.day5
   (:require [helpers.help :as help]
-            [clojure.string :as str]
-            )
+            [clojure.string :as str])
   )
 
 
