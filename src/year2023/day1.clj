@@ -1,11 +1,11 @@
 (ns year2023.day1
   (:require [clojure.string :as str]
-            [helpers.help :as help])
-  )
+            [helpers.help :as help]))
 
 (defonce input (str/split-lines (help/get-data-from-this-day 2023 1)))
 
 (def test-input "two1nine\neightwothree\nabcone2threexyz\nxtwone3four\n4nineeightseven2\nzoneight234\n7pqrstsixteen")
+
 (defn parse-a-line
   [reg-ex ss]
   (let [resu (re-seq reg-ex ss)
@@ -29,8 +29,7 @@
    :six 6
    :nine 9
    :zero 0
-   :eight 8}
-  )
+   :eight 8})
 
 (defn translations
   [i]
@@ -38,6 +37,7 @@
         :else (-> i
                   keyword
                   numbers-as-strings)))
+
 (defn parse-a-line-again
   [reg-ex ss]
   (let [resu (re-seq reg-ex ss)

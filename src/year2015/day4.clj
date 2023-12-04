@@ -5,7 +5,7 @@
 
 (defn day4-1
   []
-  (let [input "bgvyzdsv"]
+  (let [input "ckczppom"]
     (loop
       [counter 0]
       (let [
@@ -21,7 +21,7 @@
 
 (defn day4-2
   []
-  (let [input "bgvyzdsv"]
+  (let [input "ckczppom"]
     (loop
       [counter 0]
       (let [
