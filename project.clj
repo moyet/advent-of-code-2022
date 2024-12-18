@@ -7,6 +7,8 @@
                  [hato "0.9.0"]
                  [clj-http "3.12.3"]
                  [pandect "1.0.2"]
+                 [org.clojure/math.numeric-tower "0.0.5"]
+
                  ]
   :main ^:skip-aot advent-of-code-2022.core/main
   :repl-options {:init-ns advent-of-code-2022.core})

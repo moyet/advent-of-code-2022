@@ -6,7 +6,7 @@
   {:session
    {
     :value
-    "53616c7465645f5fd4890bc29bd8973aa982e16b2e6b95b93b0972e9118d92335a08684b41061017f610e8a324d39902fff136b70638222f4622d93dbcaa8faf"}})
+    "53616c7465645f5f868a27282a37a594cc3f5232d12368eeb1d6c56bac21fd0fff95249a6de29eecda8a33e897b1005885c3a9cf06605eebdda3a73d2e7488e0"}})
 
 (def date-url
   "https://adventofcode.com/%s/day/%s/input" )
