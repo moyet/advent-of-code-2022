@@ -1,7 +1,7 @@
 (ns year2015.day5
   (:require [helpers.help :as help]
-            [clojure.string :as str])
-  )
+            [clojure.string :as str]))
+
 
 
 (def input (help/get-data-from-this-day 2015 5))
@@ -42,3 +42,6 @@
                             (re-find #"(.).\1"))))
              count)]
     input))
+
+(println "1: "(day5-1))
+(println "2: "(day5-2))

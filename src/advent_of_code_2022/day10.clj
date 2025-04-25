@@ -105,7 +105,7 @@
                                                            (conj cycles x)
                                                            (into cycles [x (+ x (Integer/parseInt param))])
                                                            )))
- 
+
 (defn draw [[screen pos] sprite] (
                                    if (contains? #{-1 0 1} (- (mod pos 40) sprite))
                                    [(conj screen "#") (inc pos)]

@@ -1,16 +1,16 @@
 (ns year2015.day3
   (:require [helpers.help :as help]
-            [clojure.string :as str]
-            )
-  )
+            [clojure.string :as str]))
+
+
 
 
 (def input (help/get-data-from-this-day 2015 3))
 
 (def start {:pos [0 0]
             :visited #{}
-            :vektor (vec input)
-            })
+            :vektor (vec input)})
+
 
 (defn moving [{:keys [pos visited vektor]}]
   (let [karakter (first vektor)
@@ -54,12 +54,12 @@
 
 (defn day3-1
   []
-  (let [result (loop [res start ]
-    (if (= 0 (count (:vektor res)))
-      res
-      (recur (moving res))
-      )
-    )]
+  (let [result (loop [res start]
+                (if (= 0 (count (:vektor res)))
+                  res
+                  (recur (moving res))))]
+
+
     (-> result
         :visited
         count)))
@@ -68,14 +68,14 @@
   []
   (let [partitioned (partition 2 input)]
     (let [result (loop
-      [res {:vektor partitioned
-            :pos-santa [0 0]
-            :pos-rob [0 0]
-            :visited #{}
-            }]
-      (if (= 0 (count (:vektor res)))
-        res
-        (recur (moving-again res))))]
+                  [res {:vektor partitioned
+                        :pos-santa [0 0]
+                        :pos-rob [0 0]
+                        :visited #{}}]
+
+                  (if (= 0 (count (:vektor res)))
+                    res
+                    (recur (moving-again res))))]
       (-> result
           :visited
           count))))

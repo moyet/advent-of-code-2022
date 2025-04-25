@@ -1,8 +1,6 @@
 (ns year2015.day2
   (:require [helpers.help :as help]
-            [clojure.string :as str]
-            )
-  )
+            [clojure.string :as str]))
 
 (def input (help/get-data-from-this-day 2015 2))
 
@@ -22,12 +20,12 @@
             sort
             (take 2)
             (apply +)
-            (* 2)
-            )
-        ]
-    (+ s rz)
-    )
-  )
+            (* 2))]
+
+
+    (+ s rz)))
+
+
 
 (defn question-1 []
   (let [input (->> input
@@ -35,13 +33,13 @@
                    (map (fn [l]
                           (->> (str/split l #"x")
                                (map #(Integer/parseInt %))
-                               calc-something
-                               )))
-                   (apply +)
-                   )]
-    input
-    )
-  )
+                               calc-something)))
+
+                   (apply +))]
+
+    input))
+
+
 
 (defn question-2
   []
@@ -51,10 +49,11 @@
                           (->> (str/split l #"x")
                                (map #(Integer/parseInt %))
                                vec
-                               calc-something-else
-                               )))
-                   (apply +)
-                   )]
-    input
-    )
-  )
+                               calc-something-else)))
+
+                   (apply +))]
+
+    input))
+
+
+(question-1)
